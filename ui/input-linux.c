@@ -241,8 +241,8 @@ static void input_linux_handle_keyboard(InputLinux *il,
         }
 
         /* hotkey -> record switch request ... */
-        if (il->keydown[KEY_LEFTCTRL] &&
-            il->keydown[KEY_RIGHTCTRL]) {
+        // JK: eigen keybind
+        if (il->keydown[KEY_SCROLLLOCK]) {
             il->grab_request = true;
         }
 
@@ -281,6 +281,16 @@ static void input_linux_handle_mouse(InputLinux *il, struct input_event *event)
         case BTN_RIGHT:
             qemu_input_queue_btn(NULL, INPUT_BUTTON_RIGHT, event->value);
             break;
+
+        case BTN_SIDE:
+            qemu_input_queue_btn(NULL, KEY_LEFTBRACE, event->value);
+            fprintf(stderr, "Mouse BTN_SIDE: %d, sending left brace\n", event->code);
+            break;
+        case BTN_EXTRA:
+            qemu_input_queue_btn(NULL, KEY_RIGHTBRACE, event->value);
+            fprintf(stderr, "Mouse BTN_EXTRA: %d, sending right brace\n", event->code);
+            break;
+
         case BTN_MIDDLE:
             qemu_input_queue_btn(NULL, INPUT_BUTTON_MIDDLE, event->value);
             break;
